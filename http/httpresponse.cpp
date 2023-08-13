@@ -56,7 +56,7 @@ HttpResponse::~HttpResponse() {
 
 void HttpResponse::Init(const string& srcDir, string& path, bool isKeepAlive, int code){
     assert(srcDir != "");
-    if(mmFile_) { UnmapFile(); }
+    if(mmFile_) { UnmapFile(); } // 将mmap内存清空
     code_ = code;
     isKeepAlive_ = isKeepAlive;
     path_ = path;
@@ -67,7 +67,7 @@ void HttpResponse::Init(const string& srcDir, string& path, bool isKeepAlive, in
 
 void HttpResponse::MakeResponse(Buffer& buff) {
     /* 判断请求的资源文件 */
-    if(stat((srcDir_ + path_).data(), &mmFileStat_) < 0 || S_ISDIR(mmFileStat_.st_mode)) {
+    if(stat((srcDir_ + path_).data(), &mmFileStat_) < 0 || S_ISDIR(mmFileStat_.st_mode)) { // stat()判断文件能否打开, S_ISDIR()判断一个路径是不是目录
         code_ = 404;
     }
     else if(!(mmFileStat_.st_mode & S_IROTH)) {
@@ -121,6 +121,9 @@ void HttpResponse::AddHeader_(Buffer& buff) {
 }
 
 void HttpResponse::AddContent_(Buffer& buff) {
+
+
+
     int srcFd = open((srcDir_ + path_).data(), O_RDONLY);
     if(srcFd < 0) { 
         ErrorContent(buff, "File NotFound!");
@@ -142,7 +145,7 @@ void HttpResponse::AddContent_(Buffer& buff) {
 
 void HttpResponse::UnmapFile() {
     if(mmFile_) {
-        munmap(mmFile_, mmFileStat_.st_size);
+        munmap(mmFile_, mmFileStat_.st_size); // int munmap(void *start, size_t length); release mapping memory
         mmFile_ = nullptr;
     }
 }

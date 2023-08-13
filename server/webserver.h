@@ -18,17 +18,14 @@
 #include "epoller.h"
 #include "../log/log.h"
 #include "../timer/heaptimer.h"
-#include "../pool/sqlconnpool.h"
 #include "../pool/threadpool.h"
-#include "../pool/sqlconnRAII.h"
 #include "../http/httpconn.h"
 
 class WebServer {
 public:
     WebServer(
         int port, int trigMode, int timeoutMS, bool OptLinger, 
-        int sqlPort, const char* sqlUser, const  char* sqlPwd, 
-        const char* dbName, int connPoolNum, int threadNum,
+        int threadNum,
         bool openLog, int logLevel, int logQueSize);
 
     ~WebServer();

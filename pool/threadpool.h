@@ -17,7 +17,7 @@ public:
     explicit ThreadPool(size_t threadCount = 8): pool_(std::make_shared<Pool>()) {
             assert(threadCount > 0);
             for(size_t i = 0; i < threadCount; i++) {
-                std::thread([pool = pool_] { // 将pool_变量传给poo，更加高效的内存管理
+                std::thread([pool = pool_] { // 将pool_变量传给pool，更加高效的内存管理
                     std::unique_lock<std::mutex> locker(pool->mtx); // locked
                     while(true) {
                         if(!pool->tasks.empty()) {

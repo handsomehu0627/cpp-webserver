@@ -57,10 +57,12 @@ int HttpConn::GetPort() const {
     return addr_.sin_port;
 }
 
+// 全部读完之后再去到OnProcess方法进行HTTP的解析
 ssize_t HttpConn::read(int* saveErrno) {
     ssize_t len = -1;
+    // read all the data into readBuffer
     do {
-        len = readBuff_.ReadFd(fd_, saveErrno);
+        len = readBuff_.ReadFd(fd_, saveErrno); // 读指定连接（fd）的数据进readBuffer
         if (len <= 0) {
             break;
         }
@@ -94,8 +96,11 @@ ssize_t HttpConn::write(int* saveErrno) {
     return len;
 }
 
+// process received HTTP packets
+// 1. analyze request with HTTP protocol
+// 2. prepare iovec for writing response
 bool HttpConn::process() {
-    request_.Init(); // 重新初始化request对象
+    request_.Init();
     if(readBuff_.ReadableBytes() <= 0) {
         return false;
     }
@@ -113,7 +118,7 @@ bool HttpConn::process() {
     iovCnt_ = 1;
 
     /* 文件 */
-    if(response_.FileLen() > 0  && response_.File()) {
+    if(response_.FileLen() > 0  && response_.File()) { // set the file for return
         iov_[1].iov_base = response_.File();
         iov_[1].iov_len = response_.FileLen();
         iovCnt_ = 2;

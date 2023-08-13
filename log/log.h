@@ -59,7 +59,7 @@ private:
     bool isAsync_;
 
     FILE* fp_;
-    std::unique_ptr<BlockDeque<std::string>> deque_; 
+    std::unique_ptr<BlockDeque<std::string> > deque_;
     std::unique_ptr<std::thread> writeThread_;
     std::mutex mtx_;
 };

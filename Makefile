@@ -12,7 +12,7 @@ OBJS = ../code/log/*.cpp ../code/pool/*.cpp ../code/timer/*.cpp \
 
 # make的时候默认执行all下的命令
 all: $(OBJS)
-	$(CXX) $(CFLAGS) $(OBJS) -o ../bin/$(TARGET)  -pthread -lmysqlclient
+	$(CXX) $(CFLAGS) $(OBJS) -o ../bin/$(TARGET)  -pthread
 
 # make clean 才会执行clean下的命令
 clean:
