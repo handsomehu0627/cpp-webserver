@@ -184,7 +184,7 @@ void Log::AsyncWrite_() {
 }
 
 Log* Log::Instance() {
-    static Log inst;
+    static Log inst; // global singleton
     return &inst;
 }
 
